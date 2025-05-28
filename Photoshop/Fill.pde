@@ -38,6 +38,5 @@ public class Fill extends Tool {
     layer.beginDraw();
     layer.background(fillColor);
     layer.endDraw();
-    System.out.println("e");
   }
 }
