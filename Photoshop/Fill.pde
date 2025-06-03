@@ -1,22 +1,8 @@
-public class Fill extends Tool {
-  private PGraphics layer;
+public class Fill implements Tool {
   private color fillColor;
-  
-  public Fill(PGraphics layer, color fillColor) {
-    this.layer = layer;
-    this.fillColor = fillColor;
-  }
-  
-  public PGraphics currentLayer() {
-    return layer;
-  }
   
   public color getColor() {
     return fillColor;
-  }
-  
-  public void changeLayer(PGraphics layer) {
-    this.layer = layer;
   }
   
   public void setColor(color fillColor) {
@@ -25,18 +11,20 @@ public class Fill extends Tool {
   
   @Override
   public void mousePressed() {
-    
   }
   
   @Override
   public void mouseDragged() {
-    
   }
   
   @Override
   public void mouseReleased() {
-    layer.beginDraw();
-    layer.background(fillColor);
-    layer.endDraw();
+    currentLayer.graphics().beginDraw();
+    currentLayer.graphics().background(fillColor);
+    currentLayer.graphics().endDraw();
+  }
+  
+  @Override
+  public void mouseWheel(MouseEvent event) {
   }
 }

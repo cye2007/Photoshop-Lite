@@ -1,5 +1,5 @@
 public class Erase extends PaintTool {
-  public Erase(PGraphics layer) {
-    super(layer, 1, color(255));
+  public Erase() {
+    super(1, color(255));
   }
 }

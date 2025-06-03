@@ -1,20 +1,14 @@
-public abstract class PaintTool extends Tool {
-  private PGraphics layer;
+public abstract class PaintTool implements Tool {
   private int size; // Consider changing to double in the future
   private double hardness;
   private double opacity;
   private color strokeColor;
   
-  public PaintTool(PGraphics layer, double hardness, color strokeColor) {
-    this.layer = layer;
+  public PaintTool(double hardness, color strokeColor) {
     size = 10;
     this.hardness = hardness;
     opacity = 1;
     this.strokeColor = strokeColor;
-  }
-  
-  public PGraphics currentLayer() {
-    return layer;
   }
   
   public int getSize() {
@@ -32,11 +26,7 @@ public abstract class PaintTool extends Tool {
   public double getHardness() {
     return hardness;
   }
-  
-  public void changeLayer(PGraphics layer) {
-    this.layer = layer;
-  }
-  
+
   public void setSize(int size) {
     this.size = size;
   }
@@ -59,14 +49,18 @@ public abstract class PaintTool extends Tool {
   
   @Override
   public void mouseDragged() {
-    layer.beginDraw();
-    layer.stroke(0);
-    layer.strokeWeight(10);
-    layer.line(mouseX, mouseY, pmouseX, pmouseY);
-    layer.endDraw();
+    currentLayer.graphics().beginDraw();
+    currentLayer.graphics().stroke(strokeColor);
+    currentLayer.graphics().strokeWeight(10);
+    currentLayer.graphics().line(pmouseX - offset.x, pmouseY - offset.y, mouseX - offset.x, mouseY - offset.y);
+    currentLayer.graphics().endDraw();
   }
   
   @Override
   public void mouseReleased() {
+  }
+  
+  @Override
+  public void mouseWheel(MouseEvent event) {
   }
 }
