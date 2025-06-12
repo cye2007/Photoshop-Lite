@@ -1,14 +1,4 @@
 public class Fill implements Tool {
-  private color fillColor;
-  
-  public color getColor() {
-    return fillColor;
-  }
-  
-  public void setColor(color fillColor) {
-    this.fillColor = fillColor;
-  }
-  
   @Override
   public void mousePressed() {
   }
@@ -20,7 +10,7 @@ public class Fill implements Tool {
   @Override
   public void mouseReleased() {
     currentLayer.graphics().beginDraw();
-    currentLayer.graphics().background(fillColor);
+    currentLayer.graphics().background(foregroundColor);
     currentLayer.graphics().endDraw();
   }
   

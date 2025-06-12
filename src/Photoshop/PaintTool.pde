@@ -2,13 +2,11 @@ public abstract class PaintTool implements Tool {
   private int size; // Consider changing to double in the future
   private double hardness;
   private double opacity;
-  private color strokeColor;
   
-  public PaintTool(double hardness, color strokeColor) {
+  public PaintTool(double hardness) {
     size = 10;
     this.hardness = hardness;
     opacity = 1;
-    this.strokeColor = strokeColor;
   }
   
   public int getSize() {
@@ -17,10 +15,6 @@ public abstract class PaintTool implements Tool {
   
   public double getOpacity() {
     return opacity;
-  }
-  
-  public color getColor() {
-    return strokeColor;
   }
   
   public double getHardness() {
@@ -39,10 +33,6 @@ public abstract class PaintTool implements Tool {
     this.opacity = opacity;
   }
   
-  public void setColor(color strokeColor) {
-    this.strokeColor = strokeColor;
-  }
-  
   @Override
   public void mousePressed() {
   }
@@ -50,7 +40,7 @@ public abstract class PaintTool implements Tool {
   @Override
   public void mouseDragged() {
     currentLayer.graphics().beginDraw();
-    currentLayer.graphics().stroke(strokeColor);
+    currentLayer.graphics().stroke(foregroundColor);
     currentLayer.graphics().strokeWeight(10);
     currentLayer.graphics().line(pmouseX - offset.x, pmouseY - offset.y, mouseX - offset.x, mouseY - offset.y);
     currentLayer.graphics().endDraw();

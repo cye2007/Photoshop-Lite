@@ -9,21 +9,26 @@ Brush brush = new Brush();
 Erase erase = new Erase();
 Fill fill = new Fill();
 
+String filePath ;
 Canvas canvas;
 int layerIndex;
 Layer currentLayer;
 Tool currentTool = brush;
+color foregroundColor;
+color backgroundColor;
 
 void setup() {
   windowResizable(true);
   windowMove(0, 0);
   surface.setSize(displayWidth, displayHeight);
   createGUI();
-  //GCScheme.changePalette(8, panelColor);
+  filePath = null;
   canvas = new Canvas();
   layerIndex = 0;
   currentLayer = canvas.getLayer(layerIndex);
   layerOpacity.setValue(canvas.getLayer(layerIndex).getOpacity());
+  zoomLevel.setTextAlign(GAlign.CENTER, GAlign.CENTER);
+
   imageMode(CENTER);
 }
 
@@ -55,4 +60,22 @@ void mouseReleased() {
 
 void mouseWheel(MouseEvent event) {
   currentTool.mouseWheel(event);
+}
+
+void saveLocationSelected(File selection) {
+  if (selection == null) System.out.println("Window was closed or user hit cancel.");
+  else {
+    System.out.println("User selected: " + selection.getAbsolutePath());
+    filePath = selection.getAbsolutePath();
+    canvas.saveCanvas(filePath);
+  }
+}
+
+void loadFolderSelected(File selection) {
+  if (selection == null) System.out.println("Window was closed or user hit cancel.");
+  else {
+    System.out.println("User selected: " + selection.getAbsolutePath());
+    filePath = selection.getAbsolutePath();
+    canvas = new Canvas(filePath);
+  }
 }

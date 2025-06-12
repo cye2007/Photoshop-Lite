@@ -3,8 +3,17 @@ public class Layer extends Lockable {
   private float opacity;
   private PGraphics graphics;
   
-  public Layer() {
-    name = "Untitled";
+  public Layer(int num) {
+    name = "Layer " + num;
+    graphics = createGraphics(canvasWidth, canvasHeight);
+    graphics.beginDraw();
+    graphics.background(255);
+    graphics.endDraw();
+    opacity = 1;
+  }
+  
+  public Layer(String name) {
+    this.name = name;
     graphics = createGraphics(canvasWidth, canvasHeight);
     graphics.beginDraw();
     graphics.background(255);
@@ -32,8 +41,8 @@ public class Layer extends Lockable {
     this.opacity = opacity;
   }
   
-  public Layer duplicate() {
-    Layer duplicate = new Layer();
-    return duplicate;
-  }
+  //public Layer duplicate() {
+  //  Layer duplicate = new Layer();
+  //  return duplicate;
+  //}
 }

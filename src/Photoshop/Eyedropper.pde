@@ -1,9 +1,7 @@
-public class ColorPicker implements Tool {
-  private color selectedColor;
-  
+public class Eyedropper implements Tool {  
   @Override
   public void mousePressed() {
-    selectedColor = get(mouseX, mouseY);
+    foregroundColor = get(mouseX, mouseY);
   }
   
   @Override
