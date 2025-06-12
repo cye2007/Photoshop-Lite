@@ -40,6 +40,7 @@ public void brushButtonPressed(GButton source, GEvent event) { //_CODE_:brushBut
 public void eraseButtonPressed(GButton source, GEvent event) { //_CODE_:eraseButton:768440:
   println("eraseButton - GButton >> GEvent." + event + " @ " + millis());
   currentTool = erase;
+  G4P.selectColor();
 } //_CODE_:eraseButton:768440:
 
 public void fillButtonPressed(GButton source, GEvent event) { //_CODE_:fillButton:563538:
@@ -78,10 +79,8 @@ public void addLayerButtonPressed(GButton source, GEvent event) { //_CODE_:addLa
 
 public void removeLayerButtonPressed(GButton source, GEvent event) { //_CODE_:removeLayerButton:679056:
   println("button1 - GButton >> GEvent." + event + " @ " + millis());
-  if (canvas.size() > 1) {
-      canvas.removeLayer(layerIndex);
-      layerIndex = Math.min(layerIndex, canvas.size() - 1);
-  }
+  canvas.removeLayer(layerIndex);
+  layerIndex = Math.min(layerIndex, canvas.size() - 1);
 } //_CODE_:removeLayerButton:679056:
 
 public void layerOpacityChanged(GCustomSlider source, GEvent event) { //_CODE_:layerOpacity:549092:

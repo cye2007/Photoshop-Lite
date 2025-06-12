@@ -11,6 +11,7 @@ public class Zoom implements Tool {
   
   @Override
   public void mouseReleased() {
+    canvas.changeZoom(.1);
   }
   
   @Override

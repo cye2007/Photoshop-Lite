@@ -4,12 +4,15 @@ public class Canvas extends Lockable {
   private float zoom;
   private ArrayList<Layer> layers;
   
+  private PGraphics graphics;
+  
   public Canvas() {
     canvasWidth = 1080;
     canvasHeight = 860;
     zoom = 1;
     layers = new ArrayList<Layer>();
     layers.add(new Layer());
+    graphics = createGraphics(canvasWidth, canvasHeight);
   }
   
   public int getWidth() {
@@ -22,6 +25,10 @@ public class Canvas extends Lockable {
   
   public float getZoom() {
     return zoom;
+  }
+  
+  public PGraphics graphics() {
+    return graphics;
   }
   
   public void setWidth(int canvasWidth) {
@@ -49,6 +56,7 @@ public class Canvas extends Lockable {
   }
   
   public Layer removeLayer(int index) {
+    if (layers.size() <= 1) layers.add(new Layer());
     return layers.remove(index);
   }
   
@@ -60,14 +68,21 @@ public class Canvas extends Lockable {
     layers.add(Math.max(index1, index2), layers.set(Math.min(index1, index2), layers.remove(Math.max(index1, index2))));
   }
   
-  public void saveCanvas() {
-    PGraphics file = createGraphics(canvasWidth, canvasHeight);
-    file.beginDraw();
-    for (Layer layer : layers) {
-      tint(255, layer.getOpacity() * 255);
-      file.image(layer.graphics(), 0, 0);
+  public void updateCanvas() {
+    graphics.beginDraw();
+    graphics.imageMode(CENTER);
+    graphics.translate(-mouseX, -mouseY);
+    graphics.scale(zoom);
+    graphics.translate(mouseX, mouseY);
+    graphics.imageMode(CORNER);
+    for (Layer layer : canvas.layers) {
+      graphics.tint(255, layer.getOpacity() * 255);
+      graphics.image(layer.graphics(), 0, 0);
     }
-    file.endDraw();
-    file.save("photo.png");
+    graphics.endDraw();
+  }
+  
+  public void saveCanvas() {
+    graphics.save("photo.png");
   }
 }

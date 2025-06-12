@@ -2,7 +2,7 @@ import g4p_controls.*;
 
 int canvasWidth = 1080;
 int canvasHeight = 860;
-PVector offset = new PVector(80, 60);
+PVector offset = new PVector(620, 490);
 
 Zoom zoom = new Zoom();
 Brush brush = new Brush();
@@ -24,16 +24,21 @@ void setup() {
   layerIndex = 0;
   currentLayer = canvas.getLayer(layerIndex);
   layerOpacity.setValue(canvas.getLayer(layerIndex).getOpacity());
+  imageMode(CENTER);
 }
 
 void draw() {
+  background(255);
   //canvas.graphics().translate(-mouseX, -mouseY);
   //canvas.graphics().scale(canvas.getZoom());
   //canvas.graphics().translate(mouseX, mouseY);
-  for (Layer layer : canvas.layers) {
-    tint(255, layer.getOpacity() * 255);
-    image(layer.graphics(), offset.x, offset.y);
-  }
+  canvas.updateCanvas();
+  image(canvas.graphics(), offset.x, offset.y);
+  //for (Layer layer : canvas.layers) {
+  //  layer.graphics().scale(canvas.getZoom());
+  //  tint(255, layer.getOpacity() * 255);
+  //  image(layer.graphics(), offset.x, offset.y);
+  //}
 }
 
 void mousePressed() {
