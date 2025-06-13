@@ -5,9 +5,9 @@ import g4p_controls.*;
 
 final int screenWidth = 1440;
 final int screenHeight = 760;
-int canvasWidth = 1040;
-int canvasHeight = 700;
-PVector centerOffset = new PVector(620, 410);
+final int canvasScreenWidth = 1040;
+final int canvasScreenHeight = 700;
+PVector centerOffset = new PVector(600, 410);
 PVector cornerOffset = new PVector(80, 60);
 
 Zoom zoom = new Zoom();
@@ -23,7 +23,7 @@ Layer currentLayer;
 Tool currentTool;
 color currentColor;
 
-PGraphics copy;
+PGraphics copiedLayer;
 
 void setup() {
   windowMove(0, 0);
@@ -41,8 +41,9 @@ void setup() {
 }
 
 void draw() {
+  System.out.println(canvas.size());
   canvas.updateCanvas();
-  image(canvas.graphics(), centerOffset.x, centerOffset.y, canvasWidth, canvasHeight);
+  image(canvas.graphics(), centerOffset.x, centerOffset.y);
 }
 
 void setLayerProperities() {
@@ -93,5 +94,21 @@ void loadFolderSelected(File selection) {
     System.out.println("User selected: " + selection.getAbsolutePath());
     filePath = selection.getAbsolutePath();
     canvas = new Canvas(filePath);
+  }
+}
+
+void imageSelected(File selection) {
+  if (selection == null) System.out.println("Window was closed or user hit cancel.");
+  else {
+    System.out.println("User selected: " + selection.getAbsolutePath());
+    try {
+      Layer newLayer = new Layer(loadImage(selection.getAbsolutePath()));
+      canvas.addLayer(layerIndex + 1, newLayer);
+      layerIndex++;
+      currentLayer = canvas.getLayer(layerIndex);
+    }
+    catch (Exception e) {
+      System.out.println("Image failed to load, the image format isn't supported, or the selected file is not an image");
+    }
   }
 }

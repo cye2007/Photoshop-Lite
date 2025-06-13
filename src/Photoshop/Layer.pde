@@ -5,10 +5,10 @@ public class Layer extends Lockable {
   private float opacity;
   private PGraphics graphics;
   
-  public Layer(int num) {
+  public Layer() {
     super();
-    name = "Layer " + num;
-    graphics = createGraphics(canvasWidth, canvasHeight);
+    name = "Untitled Layer";
+    graphics = createGraphics(canvasScreenWidth, canvasScreenHeight);
     graphics.beginDraw();
     graphics.background(255);
     graphics.endDraw();
@@ -16,10 +16,21 @@ public class Layer extends Lockable {
   }
   
   public Layer(String name) {
+    super();
     this.name = name;
-    graphics = createGraphics(canvasWidth, canvasHeight);
+    graphics = createGraphics(canvasScreenWidth, canvasScreenHeight);
     graphics.beginDraw();
     graphics.background(255);
+    graphics.endDraw();
+    opacity = 1;
+  }
+  
+  public Layer(PImage uploadedImage) {
+    super();
+    graphics = createGraphics(canvasScreenWidth, canvasScreenHeight);
+    graphics.beginDraw();
+    graphics.background(255);
+    graphics.image(uploadedImage, 0, 0);
     graphics.endDraw();
     opacity = 1;
   }
@@ -52,10 +63,16 @@ public class Layer extends Lockable {
     return duplicate;
   }
   
-  public void copy() {
-    copy = createGraphics(canvasWidth, canvasHeight);
-    copy.beginDraw();
-    copy.image(graphics, 0, 0);
-    copy.endDraw();
+  public void copyLayer() {
+    copiedLayer = createGraphics(canvasScreenWidth, canvasScreenHeight);
+    copiedLayer.beginDraw();
+    copiedLayer.image(graphics, 0, 0);
+    copiedLayer.endDraw();
+  }
+  
+  public void pasteLayer() {
+    graphics.beginDraw();
+    graphics.image(copiedLayer, 0, 0);
+    graphics.endDraw();
   }
 }

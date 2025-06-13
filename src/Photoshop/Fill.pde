@@ -9,9 +9,11 @@ public class Fill implements Tool {
   
   @Override
   public void mouseReleased() {
-    currentLayer.graphics().beginDraw();
-    currentLayer.graphics().background(currentColor);
-    currentLayer.graphics().endDraw();
+    if (!currentLayer.isLocked()) {
+      currentLayer.graphics().beginDraw();
+      currentLayer.graphics().background(currentColor);
+      currentLayer.graphics().endDraw();
+    }
   }
   
   @Override

@@ -17,6 +17,5 @@ public class Zoom implements Tool {
   @Override
   public void mouseWheel(MouseEvent event) {
     canvas.changeZoom(event.getCount() * -.1);
-    System.out.println(event.getCount());
   }
 }

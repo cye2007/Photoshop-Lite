@@ -4,9 +4,9 @@ public class Canvas extends Lockable {
   private String name;
   private int canvasWidth;
   private int canvasHeight;
-  private int layerNumber = 1;
   private float zoom;
   private ArrayList<Layer> layers;
+  private ArrayList<String> layerNames;
   //private LinkedList<ArrayList<Layer>> history;
   //private int currentState;
   private PGraphics graphics;
@@ -14,12 +14,13 @@ public class Canvas extends Lockable {
   public Canvas() {
     super();
     name = "Untitled";
-    canvasWidth = 1080;
-    canvasHeight = 860;
+    canvasWidth = canvasScreenWidth;
+    canvasHeight = canvasScreenHeight;
     zoom = 1;
     layers = new ArrayList<Layer>();
-    layers.add(new Layer(layerNumber));
-    layerNumber++;
+    layers.add(new Layer());
+    layerNames = new ArrayList<String>();
+    layerNames.add(layers.get(0).getName());
     //history = new LinkedList<ArrayList<Layer>>();
     //history.add(layers);
     graphics = createGraphics(canvasWidth, canvasHeight);
@@ -27,13 +28,13 @@ public class Canvas extends Lockable {
   }
   
   public Canvas(String filePath) {
+    super();
     try {
       JSONObject metadata = loadJSONObject(filePath + "/canvasMetadata.json");
       JSONObject canvasData = metadata.getJSONObject("canvas");
       name = canvasData.getString("name");
       canvasWidth = canvasData.getInt("canvasWidth");
       canvasHeight = canvasData.getInt("canvasHeight");
-      layerNumber = canvasData.getInt("layerNumber");
       layers = new ArrayList<Layer>();
       JSONArray layersData = metadata.getJSONArray("layers");
       for (int i = 0; i < layersData.size(); i++) {
@@ -110,13 +111,16 @@ public class Canvas extends Lockable {
   }
   
   public void addLayer(int index) {
-    layers.add(index + 1, new Layer(layerNumber));
-    layerNumber++;
+    Layer newLayer = new Layer();
+    layers.add(index, newLayer);
+  }
+  
+  public void addLayer(int index, Layer layer) {
+    layers.add(index, layer);
   }
   
   public Layer deleteLayer(int index) {
-    if (layers.size() <= 1) layers.add(new Layer(layerNumber));
-    layerNumber++;
+    if (layers.size() <= 1) layers.add(new Layer());;
     return layers.remove(index);
   }
   
@@ -126,6 +130,7 @@ public class Canvas extends Lockable {
   
   public void sendLayerForward(int index) {
     layers.add(Math.min(index + 1, layers.size()), layers.remove(index));
+    
   }
   
   public void sendLayerBackward(int index) {
@@ -155,6 +160,11 @@ public class Canvas extends Lockable {
       graphics.image(layer.graphics(), 0, 0);
     }
     graphics.endDraw();
+    layerNames.clear();
+    for (Layer layer : layers) {
+      layerNames.add(layer.getName());
+    }
+    layersList.setItems(layerNames, layerIndex);
   }
   
   public void saveCanvas(String filePath) {
@@ -163,7 +173,6 @@ public class Canvas extends Lockable {
     canvasData.setString("name", name);
     canvasData.setInt("canvasWidth", canvasWidth);
     canvasData.setInt("canvasHeight", canvasHeight);
-    canvasData.setInt("layerNumber", layerNumber);
     metadata.setJSONObject("canvas", canvasData);
     JSONArray layersData = new JSONArray();
     for (Layer layer : layers) {

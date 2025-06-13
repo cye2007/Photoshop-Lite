@@ -76,6 +76,7 @@ public void typeButtonPressed(GButton source, GEvent event) { //_CODE_:typeButto
 
 public void addImageButtonPressed(GButton source, GEvent event) { //_CODE_:addImageButton:495799:
   println("button1 - GButton >> GEvent." + event + " @ " + millis());
+  selectInput("Select an image", "imageSelected");
 } //_CODE_:addImageButton:495799:
 
 public void LayersPanelPressed(GPanel source, GEvent event) { //_CODE_:LayersPanel:209891:
@@ -102,10 +103,14 @@ public void layerOpacityChanged(GCustomSlider source, GEvent event) { //_CODE_:l
 
 public void layersListClicked(GDropList source, GEvent event) { //_CODE_:layersList:345746:
   println("layersList - GDropList >> GEvent." + event + " @ " + millis());
+  layerIndex = layersList.getSelectedIndex();
+  currentLayer = canvas.getLayer(layerIndex);
+  layerName.setText(currentLayer.getName());
 } //_CODE_:layersList:345746:
 
 public void lockLayerButtonPressed(GButton source, GEvent event) { //_CODE_:lockLayerButton:333202:
   println("button1 - GButton >> GEvent." + event + " @ " + millis());
+  currentLayer.toggleLock();
 } //_CODE_:lockLayerButton:333202:
 
 public void copyButtonPressed(GButton source, GEvent event) { //_CODE_:copyButton:732777:
@@ -128,9 +133,10 @@ public void sendBackwardButtonPressed(GButton source, GEvent event) { //_CODE_:s
   println("button6 - GButton >> GEvent." + event + " @ " + millis());
 } //_CODE_:sendBackwardButton:265970:
 
-public void textfield1_change1(GTextField source, GEvent event) { //_CODE_:textfield1:886666:
+public void layerNameChanged(GTextField source, GEvent event) { //_CODE_:layerName:886666:
   println("textfield1 - GTextField >> GEvent." + event + " @ " + millis());
-} //_CODE_:textfield1:886666:
+  currentLayer.setName(layerName.getText());
+} //_CODE_:layerName:886666:
 
 public void propertiesPanelPressed(GPanel source, GEvent event) { //_CODE_:propertiesPanel:284779:
   println("propertiesPanel - GPanel >> GEvent." + event + " @ " + millis());
@@ -265,7 +271,7 @@ public void createGUI(){
   deleteLayerButton.setText("Delete Layer");
   deleteLayerButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   deleteLayerButton.addEventHandler(this, "deleteLayerButtonPressed");
-  layerOpacity = new GCustomSlider(this, 0, 220, 320, 40, "grey_blue");
+  layerOpacity = new GCustomSlider(this, 0, 140, 320, 40, "grey_blue");
   layerOpacity.setShowValue(true);
   layerOpacity.setShowLimits(true);
   layerOpacity.setLimits(1.0, 0.0, 1.0);
@@ -273,10 +279,10 @@ public void createGUI(){
   layerOpacity.setNumberFormat(G4P.DECIMAL, 2);
   layerOpacity.setOpaque(false);
   layerOpacity.addEventHandler(this, "layerOpacityChanged");
-  layerOpacityLabel = new GLabel(this, 0, 180, 80, 20);
+  layerOpacityLabel = new GLabel(this, 0, 120, 80, 20);
   layerOpacityLabel.setText("Layer Opacity");
   layerOpacityLabel.setOpaque(false);
-  layersList = new GDropList(this, 0, 260, 320, 200, 4, 10);
+  layersList = new GDropList(this, 0, 180, 320, 200, 4, 10);
   layersList.setItems(loadStrings("list_345746"), 0);
   layersList.addEventHandler(this, "layersListClicked");
   lockLayerButton = new GButton(this, 0, 40, 80, 40);
@@ -303,9 +309,9 @@ public void createGUI(){
   sendBackwardButton.setText("Send Backward");
   sendBackwardButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   sendBackwardButton.addEventHandler(this, "sendBackwardButtonPressed");
-  textfield1 = new GTextField(this, 0, 20, 320, 20, G4P.SCROLLBARS_NONE);
-  textfield1.setOpaque(true);
-  textfield1.addEventHandler(this, "textfield1_change1");
+  layerName = new GTextField(this, 0, 20, 320, 20, G4P.SCROLLBARS_NONE);
+  layerName.setOpaque(true);
+  layerName.addEventHandler(this, "layerNameChanged");
   LayersPanel.addControl(addLayerButton);
   LayersPanel.addControl(deleteLayerButton);
   LayersPanel.addControl(layerOpacity);
@@ -317,7 +323,7 @@ public void createGUI(){
   LayersPanel.addControl(duplicateLayerButton);
   LayersPanel.addControl(sendForwardButton);
   LayersPanel.addControl(sendBackwardButton);
-  LayersPanel.addControl(textfield1);
+  LayersPanel.addControl(layerName);
   propertiesPanel = new GPanel(this, 1120, 550, 320, 220, "Properties");
   propertiesPanel.setCollapsible(false);
   propertiesPanel.setDraggable(false);
@@ -392,7 +398,7 @@ GButton pasteButton;
 GButton duplicateLayerButton; 
 GButton sendForwardButton; 
 GButton sendBackwardButton; 
-GTextField textfield1; 
+GTextField layerName; 
 GPanel propertiesPanel; 
 GButton cwRotationButton; 
 GButton ccwRotationButton; 
