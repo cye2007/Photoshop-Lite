@@ -1,1 +1,3 @@
 # Photoshop-Lite
+My project is a recreation of a few of the features of the well known graphics editor Adobe Photoshop, a software application used for creating and manipulating images. The application allows you to edit an image you upload on a canvas. The application includes tools such as the brush, paint bucket, and eraser. Finally, the application allows you to load previous work, save your work, and/or export it.
+Note: This project necessitates downloading the Control G4P library for a functional GUI.
