@@ -1,8 +1,6 @@
 import java.util.LinkedList;
 import g4p_controls.*;
 
-//   G4P.selectColor();
-
 final int screenWidth = 1440;
 final int screenHeight = 760;
 final int canvasScreenWidth = 1040;
@@ -10,19 +8,19 @@ final int canvasScreenHeight = 700;
 PVector centerOffset = new PVector(600, 410);
 PVector cornerOffset = new PVector(80, 60);
 
-Zoom zoom = new Zoom();
+Tool currentTool = null;
 Brush brush = new Brush();
 Erase erase = new Erase();
+Eyedropper eyedropper = new Eyedropper();
 Fill fill = new Fill();
-Type type = new Type();
 
-String filePath ;
+String filePath = null;
+color currentColor = color(0);
+
 Canvas canvas;
+PShape colorDisplay;
 int layerIndex;
 Layer currentLayer;
-Tool currentTool;
-color currentColor;
-
 PGraphics copiedLayer;
 
 void setup() {
@@ -30,28 +28,34 @@ void setup() {
   surface.setSize(screenWidth, screenHeight);
   imageMode(CENTER);
   createGUI();
-  filePath = null;
   canvas = new Canvas();
-  layerIndex = 0;
-  currentLayer = canvas.getLayer(layerIndex);
-  currentTool = null;
-  currentColor = color(0);
-  //displayColor = currentColor;
-  //zoomLevel.setTextAlign(GAlign.CENTER, GAlign.CENTER);
+  setLayerProperties();
+  fill(currentColor);
+  colorDisplay = createShape(RECT, 0, 0, 80, 80);
+  noFill();
+  shape(colorDisplay, 0, 680);
 }
 
 void draw() {
-  System.out.println(canvas.size());
+  fill(currentColor);
+  colorDisplay = createShape(RECT, 0, 0, 80, 80);
+  noFill();
+  shape(colorDisplay, 0, 680);
   canvas.updateCanvas();
   image(canvas.graphics(), centerOffset.x, centerOffset.y);
 }
 
-void setLayerProperities() {
+void setLayerProperties() {
+  currentLayer = canvas.getLayer(layerIndex);
+  layerName.setText(currentLayer.getName());
+  if (currentLayer.isLocked()) lockStateLabel.setText("Locked");
+  else lockStateLabel.setText("Unlocked");
   layerOpacity.setValue(currentLayer.getOpacity());
-  //layerWidth.setValue(canvas.getLayer(layerIndex).getWidth());
+  layersList.setSelected(layerIndex);
 }
 
 void mousePressed() {
+  if (isMouseOnColorSelector()) currentColor = G4P.selectColor();
   if (currentTool != null && isMouseOnCanvas()) currentTool.mousePressed();
 }
 
@@ -68,7 +72,11 @@ void mouseWheel(MouseEvent event) {
 }
 
 boolean isMouseOnCanvas() {
-  return mouseX >= 80 && mouseX <= 1160 && mouseY >= 60 && mouseY <= 920;
+  return mouseX >= 80 && mouseX <= 1120 && mouseY >= 60 && mouseY <= 760;
+}
+
+boolean isMouseOnColorSelector() {
+  return mouseX >= 0 && mouseX <= 80 && mouseY >= 680 && mouseY <= 760;
 }
 
 void saveLocationSelected(File selection) {
@@ -94,6 +102,7 @@ void loadFolderSelected(File selection) {
     System.out.println("User selected: " + selection.getAbsolutePath());
     filePath = selection.getAbsolutePath();
     canvas = new Canvas(filePath);
+    setLayerProperties();
   }
 }
 
@@ -102,7 +111,7 @@ void imageSelected(File selection) {
   else {
     System.out.println("User selected: " + selection.getAbsolutePath());
     try {
-      Layer newLayer = new Layer(loadImage(selection.getAbsolutePath()));
+      Layer newLayer = new Layer(selection.getName(), loadImage(selection.getAbsolutePath()));
       canvas.addLayer(layerIndex + 1, newLayer);
       layerIndex++;
       currentLayer = canvas.getLayer(layerIndex);

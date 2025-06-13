@@ -34,22 +34,9 @@ public void exportButtonPressed(GButton source, GEvent event) { //_CODE_:exportB
   selectOutput("Select export location", "exportLocationSelected");
 } //_CODE_:exportButton:864758:
 
-public void undoButtonPressed(GButton source, GEvent event) { //_CODE_:undoButton:806436:
-  println("undoButton - GButton >> GEvent." + event + " @ " + millis());
-} //_CODE_:undoButton:806436:
-
-public void redoButtonPressed(GButton source, GEvent event) { //_CODE_:redoButton:320430:
-  println("redoButton - GButton >> GEvent." + event + " @ " + millis());
-} //_CODE_:redoButton:320430:
-
 public void toolPanelPressed(GPanel source, GEvent event) { //_CODE_:toolPanel:330345:
   println("toolPanel - GPanel >> GEvent." + event + " @ " + millis());
 } //_CODE_:toolPanel:330345:
-
-public void zoomButtonPressed(GButton source, GEvent event) { //_CODE_:zoomButton:746164:
-  println("button1 - GButton >> GEvent." + event + " @ " + millis());
-  currentTool = zoom;
-} //_CODE_:zoomButton:746164:
 
 public void brushButtonPressed(GButton source, GEvent event) { //_CODE_:brushButton:681834:
   println("brushButton - GButton >> GEvent." + event + " @ " + millis());
@@ -68,6 +55,7 @@ public void fillButtonPressed(GButton source, GEvent event) { //_CODE_:fillButto
 
 public void eyedropperButtonPressed(GButton source, GEvent event) { //_CODE_:eyedropperButton:526776:
   println("colorPickerButton - GButton >> GEvent." + event + " @ " + millis());
+  currentTool = eyedropper;
 } //_CODE_:eyedropperButton:526776:
 
 public void typeButtonPressed(GButton source, GEvent event) { //_CODE_:typeButton:254522:
@@ -79,38 +67,39 @@ public void addImageButtonPressed(GButton source, GEvent event) { //_CODE_:addIm
   selectInput("Select an image", "imageSelected");
 } //_CODE_:addImageButton:495799:
 
-public void LayersPanelPressed(GPanel source, GEvent event) { //_CODE_:LayersPanel:209891:
+public void LayerPanelPressed(GPanel source, GEvent event) { //_CODE_:LayerPanel:209891:
   println("panel1 - GPanel >> GEvent." + event + " @ " + millis());
-} //_CODE_:LayersPanel:209891:
+} //_CODE_:LayerPanel:209891:
 
 public void addLayerButtonPressed(GButton source, GEvent event) { //_CODE_:addLayerButton:215204:
   println("button1 - GButton >> GEvent." + event + " @ " + millis());
   canvas.addLayer(layerIndex + 1);
   layerIndex++;
-  currentLayer = canvas.getLayer(layerIndex);
+  setLayerProperties();
 } //_CODE_:addLayerButton:215204:
 
 public void deleteLayerButtonPressed(GButton source, GEvent event) { //_CODE_:deleteLayerButton:679056:
   println("button1 - GButton >> GEvent." + event + " @ " + millis());
   canvas.deleteLayer(layerIndex);
   layerIndex = Math.min(layerIndex, canvas.size() - 1);
+  setLayerProperties();
 } //_CODE_:deleteLayerButton:679056:
 
 public void layerOpacityChanged(GCustomSlider source, GEvent event) { //_CODE_:layerOpacity:549092:
   println("layerOpacity - GCustomSlider >> GEvent." + event + " @ " + millis());
-  canvas.getLayer(layerIndex).setOpacity(layerOpacity.getValueF());
+  currentLayer.setOpacity(layerOpacity.getValueF());
 } //_CODE_:layerOpacity:549092:
 
 public void layersListClicked(GDropList source, GEvent event) { //_CODE_:layersList:345746:
   println("layersList - GDropList >> GEvent." + event + " @ " + millis());
   layerIndex = layersList.getSelectedIndex();
-  currentLayer = canvas.getLayer(layerIndex);
-  layerName.setText(currentLayer.getName());
+  setLayerProperties();
 } //_CODE_:layersList:345746:
 
 public void lockLayerButtonPressed(GButton source, GEvent event) { //_CODE_:lockLayerButton:333202:
   println("button1 - GButton >> GEvent." + event + " @ " + millis());
   currentLayer.toggleLock();
+  setLayerProperties();
 } //_CODE_:lockLayerButton:333202:
 
 public void copyButtonPressed(GButton source, GEvent event) { //_CODE_:copyButton:732777:
@@ -123,6 +112,9 @@ public void pasteButtonPressed(GButton source, GEvent event) { //_CODE_:pasteBut
 
 public void duplicateLayerButtonPressed(GButton source, GEvent event) { //_CODE_:duplicateLayerButton:361188:
   println("button4 - GButton >> GEvent." + event + " @ " + millis());
+  canvas.addLayer(layerIndex + 1, currentLayer.duplicate());
+  layerIndex++;
+  setLayerProperties();
 } //_CODE_:duplicateLayerButton:361188:
 
 public void sendForwardButtonPressed(GButton source, GEvent event) { //_CODE_:sendForwardButton:726429:
@@ -137,34 +129,6 @@ public void layerNameChanged(GTextField source, GEvent event) { //_CODE_:layerNa
   println("textfield1 - GTextField >> GEvent." + event + " @ " + millis());
   currentLayer.setName(layerName.getText());
 } //_CODE_:layerName:886666:
-
-public void propertiesPanelPressed(GPanel source, GEvent event) { //_CODE_:propertiesPanel:284779:
-  println("propertiesPanel - GPanel >> GEvent." + event + " @ " + millis());
-} //_CODE_:propertiesPanel:284779:
-
-public void cwRotationButtonPressed(GButton source, GEvent event) { //_CODE_:cwRotationButton:947709:
-  println("rotateClockwiseButton - GButton >> GEvent." + event + " @ " + millis());
-} //_CODE_:cwRotationButton:947709:
-
-public void ccwRotationButtonPressed(GButton source, GEvent event) { //_CODE_:ccwRotationButton:882110:
-  println("rotateCounterclockwiseButton - GButton >> GEvent." + event + " @ " + millis());
-} //_CODE_:ccwRotationButton:882110:
-
-public void flipHorizontalButtonPressed(GButton source, GEvent event) { //_CODE_:flipHorizontalButton:991055:
-  println("button1 - GButton >> GEvent." + event + " @ " + millis());
-} //_CODE_:flipHorizontalButton:991055:
-
-public void flipVerticalButtonPressed(GButton source, GEvent event) { //_CODE_:flipVerticalButton:625152:
-  println("button1 - GButton >> GEvent." + event + " @ " + millis());
-} //_CODE_:flipVerticalButton:625152:
-
-public void textfield2_change1(GTextField source, GEvent event) { //_CODE_:canvasWidthText:819408:
-  println("textfield2 - GTextField >> GEvent." + event + " @ " + millis());
-} //_CODE_:canvasWidthText:819408:
-
-public void layerHeightChanged(GTextField source, GEvent event) { //_CODE_:canvasHeightText:937925:
-  println("textfield1 - GTextField >> GEvent." + event + " @ " + millis());
-} //_CODE_:canvasHeightText:937925:
 
 
 
@@ -182,87 +146,62 @@ public void createGUI(){
   topPanel.setDraggable(false);
   topPanel.setOpaque(true);
   topPanel.addEventHandler(this, "topPanelPressed");
-  saveButton = new GButton(this, 1280, 20, 80, 40);
+  saveButton = new GButton(this, 80, 20, 80, 40);
   saveButton.setText("Save");
   saveButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   saveButton.addEventHandler(this, "saveButtonPressed");
-  loadButton = new GButton(this, 1200, 20, 80, 40);
+  loadButton = new GButton(this, 0, 20, 80, 40);
   loadButton.setText("Load");
   loadButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   loadButton.addEventHandler(this, "loadButtonPressed");
-  exportButton = new GButton(this, 1360, 20, 80, 40);
+  exportButton = new GButton(this, 160, 20, 80, 40);
   exportButton.setText("Export");
   exportButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   exportButton.addEventHandler(this, "exportButtonPressed");
-  undoButton = new GButton(this, 0, 20, 80, 40);
-  undoButton.setText("Undo");
-  undoButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
-  undoButton.addEventHandler(this, "undoButtonPressed");
-  redoButton = new GButton(this, 80, 20, 80, 40);
-  redoButton.setText("Redo");
-  redoButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
-  redoButton.addEventHandler(this, "redoButtonPressed");
-  canvasZoom = new GLabel(this, 160, 40, 80, 20);
-  canvasZoom.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  canvasZoom.setText("100%");
-  canvasZoom.setOpaque(true);
-  zoomLabel = new GLabel(this, 160, 20, 80, 20);
-  zoomLabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  zoomLabel.setText("Zoom");
-  zoomLabel.setOpaque(false);
   topPanel.addControl(saveButton);
   topPanel.addControl(loadButton);
   topPanel.addControl(exportButton);
-  topPanel.addControl(undoButton);
-  topPanel.addControl(redoButton);
-  topPanel.addControl(canvasZoom);
-  topPanel.addControl(zoomLabel);
-  toolPanel = new GPanel(this, 0, 60, 80, 700, "Tools");
+  toolPanel = new GPanel(this, 0, 60, 80, 620, "Tools");
   toolPanel.setCollapsible(false);
   toolPanel.setDraggable(false);
   toolPanel.setText("Tools");
   toolPanel.setOpaque(true);
   toolPanel.addEventHandler(this, "toolPanelPressed");
-  zoomButton = new GButton(this, 0, 20, 80, 40);
-  zoomButton.setText("Zoom");
-  zoomButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
-  zoomButton.addEventHandler(this, "zoomButtonPressed");
-  brushButton = new GButton(this, 0, 60, 80, 40);
+  brushButton = new GButton(this, 0, 20, 80, 40);
   brushButton.setText("Brush");
   brushButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   brushButton.addEventHandler(this, "brushButtonPressed");
-  eraseButton = new GButton(this, 0, 100, 80, 40);
+  eraseButton = new GButton(this, 0, 60, 80, 40);
   eraseButton.setText("Erase");
   eraseButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   eraseButton.addEventHandler(this, "eraseButtonPressed");
-  fillButton = new GButton(this, 0, 140, 80, 40);
+  fillButton = new GButton(this, 0, 100, 80, 40);
   fillButton.setText("Fill");
   fillButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   fillButton.addEventHandler(this, "fillButtonPressed");
-  eyedropperButton = new GButton(this, 0, 220, 80, 40);
+  eyedropperButton = new GButton(this, 0, 180, 80, 40);
   eyedropperButton.setText("Eyedropper");
   eyedropperButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   eyedropperButton.addEventHandler(this, "eyedropperButtonPressed");
-  typeButton = new GButton(this, 0, 180, 80, 40);
+  typeButton = new GButton(this, 0, 140, 80, 40);
   typeButton.setText("Type");
   typeButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   typeButton.addEventHandler(this, "typeButtonPressed");
-  addImageButton = new GButton(this, 0, 260, 80, 40);
+  addImageButton = new GButton(this, 0, 220, 80, 40);
   addImageButton.setText("Add Image");
   addImageButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   addImageButton.addEventHandler(this, "addImageButtonPressed");
-  toolPanel.addControl(zoomButton);
   toolPanel.addControl(brushButton);
   toolPanel.addControl(eraseButton);
   toolPanel.addControl(fillButton);
   toolPanel.addControl(eyedropperButton);
   toolPanel.addControl(typeButton);
   toolPanel.addControl(addImageButton);
-  LayersPanel = new GPanel(this, 1120, 60, 320, 350, "Layers");
-  LayersPanel.setDraggable(false);
-  LayersPanel.setText("Layers");
-  LayersPanel.setOpaque(true);
-  LayersPanel.addEventHandler(this, "LayersPanelPressed");
+  LayerPanel = new GPanel(this, 1120, 60, 320, 700, "Layer");
+  LayerPanel.setDraggable(false);
+  LayerPanel.setText("Layer");
+  LayerPanel.setOpaque(true);
+  LayerPanel.addEventHandler(this, "LayerPanelPressed");
   addLayerButton = new GButton(this, 0, 80, 80, 40);
   addLayerButton.setText("Add Layer");
   addLayerButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
@@ -282,7 +221,7 @@ public void createGUI(){
   layerOpacityLabel = new GLabel(this, 0, 120, 80, 20);
   layerOpacityLabel.setText("Layer Opacity");
   layerOpacityLabel.setOpaque(false);
-  layersList = new GDropList(this, 0, 180, 320, 200, 4, 10);
+  layersList = new GDropList(this, 0, 180, 320, 440, 10, 20);
   layersList.setItems(loadStrings("list_345746"), 0);
   layersList.addEventHandler(this, "layersListClicked");
   lockLayerButton = new GButton(this, 0, 40, 80, 40);
@@ -309,63 +248,28 @@ public void createGUI(){
   sendBackwardButton.setText("Send Backward");
   sendBackwardButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   sendBackwardButton.addEventHandler(this, "sendBackwardButtonPressed");
-  layerName = new GTextField(this, 0, 20, 320, 20, G4P.SCROLLBARS_NONE);
+  layerName = new GTextField(this, 0, 20, 240, 20, G4P.SCROLLBARS_NONE);
   layerName.setOpaque(true);
   layerName.addEventHandler(this, "layerNameChanged");
-  LayersPanel.addControl(addLayerButton);
-  LayersPanel.addControl(deleteLayerButton);
-  LayersPanel.addControl(layerOpacity);
-  LayersPanel.addControl(layerOpacityLabel);
-  LayersPanel.addControl(layersList);
-  LayersPanel.addControl(lockLayerButton);
-  LayersPanel.addControl(copyButton);
-  LayersPanel.addControl(pasteButton);
-  LayersPanel.addControl(duplicateLayerButton);
-  LayersPanel.addControl(sendForwardButton);
-  LayersPanel.addControl(sendBackwardButton);
-  LayersPanel.addControl(layerName);
-  propertiesPanel = new GPanel(this, 1120, 550, 320, 220, "Properties");
-  propertiesPanel.setCollapsible(false);
-  propertiesPanel.setDraggable(false);
-  propertiesPanel.setText("Properties");
-  propertiesPanel.setOpaque(true);
-  propertiesPanel.addEventHandler(this, "propertiesPanelPressed");
-  cwRotationButton = new GButton(this, 0, 120, 80, 40);
-  cwRotationButton.setText("Rotate 90º Clockwise");
-  cwRotationButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
-  cwRotationButton.addEventHandler(this, "cwRotationButtonPressed");
-  ccwRotationButton = new GButton(this, 80, 120, 80, 40);
-  ccwRotationButton.setText("Rotate 90º Counterclockwise");
-  ccwRotationButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
-  ccwRotationButton.addEventHandler(this, "ccwRotationButtonPressed");
-  flipHorizontalButton = new GButton(this, 160, 120, 80, 40);
-  flipHorizontalButton.setText("Flip Horizontal");
-  flipHorizontalButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
-  flipHorizontalButton.addEventHandler(this, "flipHorizontalButtonPressed");
-  flipVerticalButton = new GButton(this, 240, 120, 80, 40);
-  flipVerticalButton.setText("Flip Vertical");
-  flipVerticalButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
-  flipVerticalButton.addEventHandler(this, "flipVerticalButtonPressed");
-  canvasWidthLabel = new GLabel(this, 0, 20, 160, 20);
-  canvasWidthLabel.setText("Width");
-  canvasWidthLabel.setOpaque(false);
-  canvasWidthText = new GTextField(this, 0, 40, 160, 30, G4P.SCROLLBARS_NONE);
-  canvasWidthText.setOpaque(true);
-  canvasWidthText.addEventHandler(this, "textfield2_change1");
-  canvasHeightLabel = new GLabel(this, 160, 20, 160, 20);
-  canvasHeightLabel.setText("Height");
-  canvasHeightLabel.setOpaque(false);
-  canvasHeightText = new GTextField(this, 160, 40, 160, 30, G4P.SCROLLBARS_NONE);
-  canvasHeightText.setOpaque(true);
-  canvasHeightText.addEventHandler(this, "layerHeightChanged");
-  propertiesPanel.addControl(cwRotationButton);
-  propertiesPanel.addControl(ccwRotationButton);
-  propertiesPanel.addControl(flipHorizontalButton);
-  propertiesPanel.addControl(flipVerticalButton);
-  propertiesPanel.addControl(canvasWidthLabel);
-  propertiesPanel.addControl(canvasWidthText);
-  propertiesPanel.addControl(canvasHeightLabel);
-  propertiesPanel.addControl(canvasHeightText);
+  lockStateLabel = new GLabel(this, 240, 20, 80, 20);
+  lockStateLabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  lockStateLabel.setOpaque(true);
+  LayerPanel.addControl(addLayerButton);
+  LayerPanel.addControl(deleteLayerButton);
+  LayerPanel.addControl(layerOpacity);
+  LayerPanel.addControl(layerOpacityLabel);
+  LayerPanel.addControl(layersList);
+  LayerPanel.addControl(lockLayerButton);
+  LayerPanel.addControl(copyButton);
+  LayerPanel.addControl(pasteButton);
+  LayerPanel.addControl(duplicateLayerButton);
+  LayerPanel.addControl(sendForwardButton);
+  LayerPanel.addControl(sendBackwardButton);
+  LayerPanel.addControl(layerName);
+  LayerPanel.addControl(lockStateLabel);
+  colorDisplayLabel = new GLabel(this, 0, 660, 80, 20);
+  colorDisplayLabel.setText("Color");
+  colorDisplayLabel.setOpaque(false);
 }
 
 // Variable declarations 
@@ -374,19 +278,14 @@ GPanel topPanel;
 GButton saveButton; 
 GButton loadButton; 
 GButton exportButton; 
-GButton undoButton; 
-GButton redoButton; 
-GLabel canvasZoom; 
-GLabel zoomLabel; 
 GPanel toolPanel; 
-GButton zoomButton; 
 GButton brushButton; 
 GButton eraseButton; 
 GButton fillButton; 
 GButton eyedropperButton; 
 GButton typeButton; 
 GButton addImageButton; 
-GPanel LayersPanel; 
+GPanel LayerPanel; 
 GButton addLayerButton; 
 GButton deleteLayerButton; 
 GCustomSlider layerOpacity; 
@@ -399,12 +298,5 @@ GButton duplicateLayerButton;
 GButton sendForwardButton; 
 GButton sendBackwardButton; 
 GTextField layerName; 
-GPanel propertiesPanel; 
-GButton cwRotationButton; 
-GButton ccwRotationButton; 
-GButton flipHorizontalButton; 
-GButton flipVerticalButton; 
-GLabel canvasWidthLabel; 
-GTextField canvasWidthText; 
-GLabel canvasHeightLabel; 
-GTextField canvasHeightText; 
+GLabel lockStateLabel; 
+GLabel colorDisplayLabel; 

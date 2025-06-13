@@ -1,5 +1,5 @@
 public abstract class PaintTool implements Tool {
-  private int size; // Consider changing to double in the future
+  private int size;
   private double hardness;
   private double opacity;
   
@@ -50,7 +50,6 @@ public abstract class PaintTool implements Tool {
   
   @Override
   public void mouseReleased() {
-    //canvas.updateHistory();
   }
   
   @Override

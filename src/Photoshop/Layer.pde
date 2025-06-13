@@ -1,35 +1,23 @@
 public class Layer extends Lockable {
   private String name;
-  //private int layerWidth;
-  //private int layerHeight;
+  
   private float opacity;
   private PGraphics graphics;
   
-  public Layer() {
+  public Layer(int num) {
     super();
-    name = "Untitled Layer";
+    name = "Layer " + num;
     graphics = createGraphics(canvasScreenWidth, canvasScreenHeight);
     graphics.beginDraw();
-    graphics.background(255);
     graphics.endDraw();
     opacity = 1;
   }
   
-  public Layer(String name) {
+  public Layer(String name, PImage uploadedImage) {
     super();
     this.name = name;
     graphics = createGraphics(canvasScreenWidth, canvasScreenHeight);
     graphics.beginDraw();
-    graphics.background(255);
-    graphics.endDraw();
-    opacity = 1;
-  }
-  
-  public Layer(PImage uploadedImage) {
-    super();
-    graphics = createGraphics(canvasScreenWidth, canvasScreenHeight);
-    graphics.beginDraw();
-    graphics.background(255);
     graphics.image(uploadedImage, 0, 0);
     graphics.endDraw();
     opacity = 1;
@@ -56,10 +44,7 @@ public class Layer extends Lockable {
   }
   
   public Layer duplicate() {
-    Layer duplicate = new Layer("Copy of " + getName());
-    duplicate.graphics().beginDraw();
-    duplicate.graphics().image(graphics(), 0, 0);
-    duplicate.graphics().endDraw();
+    Layer duplicate = new Layer("Copy of " + getName(), graphics);
     return duplicate;
   }
   

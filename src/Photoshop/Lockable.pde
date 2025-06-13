@@ -12,4 +12,12 @@ public abstract class Lockable {
   public void toggleLock() {
     isLocked ^= true;
   }
+  
+  public void lock() {
+    isLocked = true;
+  }
+  
+  public void unlock() {
+    isLocked = false;
+  }
 }
