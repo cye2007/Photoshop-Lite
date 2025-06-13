@@ -40,9 +40,9 @@ public abstract class PaintTool implements Tool {
   @Override
   public void mouseDragged() {
     currentLayer.graphics().beginDraw();
-    currentLayer.graphics().stroke(foregroundColor);
+    currentLayer.graphics().stroke(currentColor);
     currentLayer.graphics().strokeWeight(10);
-    currentLayer.graphics().line(pmouseX - offset.x, pmouseY - offset.y, mouseX - offset.x, mouseY - offset.y);
+    currentLayer.graphics().line(pmouseX - cornerOffset.x, pmouseY - cornerOffset.y, mouseX - cornerOffset.x, mouseY - cornerOffset.y);
     currentLayer.graphics().endDraw();
   }
   

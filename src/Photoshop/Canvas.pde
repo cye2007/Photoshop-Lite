@@ -16,30 +16,37 @@ public class Canvas extends Lockable {
     layers.add(new Layer(layerNumber));
     layerNumber++;
     graphics = createGraphics(canvasWidth, canvasHeight);
+    graphics.imageMode(CORNER);
   }
   
   public Canvas(String filePath) {
-    JSONObject metadata = loadJSONObject(filePath + "/canvasMetadata.json");
-    JSONObject canvasData = metadata.getJSONObject("canvas");
-    name = canvasData.getString("name");
-    canvasWidth = canvasData.getInt("canvasWidth");
-    canvasHeight = canvasData.getInt("canvasHeight");
-    layerNumber = canvasData.getInt("layerNumber");
-    layers = new ArrayList<Layer>();
-    JSONArray layersData = metadata.getJSONArray("layers");
-    for (int i = 0; i < layersData.size(); i++) {
-      JSONObject layerData = layersData.getJSONObject(i);
-      PImage layerImage = loadImage(filePath + "/canvasLayers/" + layerData.getString("name") + ".png");
-      Layer layer = new Layer(layerData.getString("name"));
-      layer.setOpacity(layerData.getFloat("opacity"));
-      layer.graphics().beginDraw();
-      layer.graphics().image(layerImage, 0, 0);
-      layer.graphics().endDraw();
-      layers.add(layer);
+    try {
+      JSONObject metadata = loadJSONObject(filePath + "/canvasMetadata.json");
+      JSONObject canvasData = metadata.getJSONObject("canvas");
+      name = canvasData.getString("name");
+      canvasWidth = canvasData.getInt("canvasWidth");
+      canvasHeight = canvasData.getInt("canvasHeight");
+      layerNumber = canvasData.getInt("layerNumber");
+      layers = new ArrayList<Layer>();
+      JSONArray layersData = metadata.getJSONArray("layers");
+      for (int i = 0; i < layersData.size(); i++) {
+        JSONObject layerData = layersData.getJSONObject(i);
+        PImage layerImage = loadImage(filePath + "/canvasLayers/" + layerData.getString("name") + ".png");
+        Layer layer = new Layer(layerData.getString("name"));
+        layer.setOpacity(layerData.getFloat("opacity"));
+        layer.graphics().beginDraw();
+        layer.graphics().image(layerImage, 0, 0);
+        layer.graphics().endDraw();
+        layers.add(layer);
+      }
+      zoom = 1;
+      graphics = createGraphics(canvasWidth, canvasHeight);
+      graphics.imageMode(CORNER);
+      updateCanvas();
     }
-    zoom = 1;
-    graphics = createGraphics(canvasWidth, canvasHeight);
-    updateCanvas();
+    catch (Exception e) {
+      System.out.println("Failed to load canvas");
+    }
   }
   
   public String getName() {
@@ -87,7 +94,7 @@ public class Canvas extends Lockable {
   }
   
   public void addLayer(int index) {
-    layers.add(index, new Layer(layerNumber));
+    layers.add(index + 1, new Layer(layerNumber));
     layerNumber++;
   }
   
@@ -105,13 +112,17 @@ public class Canvas extends Lockable {
     layers.add(Math.max(index1, index2), layers.set(Math.min(index1, index2), layers.remove(Math.max(index1, index2))));
   }
   
+  public void undo() {
+  }
+  
+  public void redo() {
+  }
+  
   public void updateCanvas() {
     graphics.beginDraw();
-    graphics.imageMode(CENTER);
     graphics.translate(-mouseX, -mouseY);
     graphics.scale(zoom);
     graphics.translate(mouseX, mouseY);
-    graphics.imageMode(CORNER);
     for (Layer layer : canvas.layers) {
       graphics.tint(255, layer.getOpacity() * 255);
       graphics.image(layer.graphics(), 0, 0);
@@ -139,6 +150,7 @@ public class Canvas extends Lockable {
     saveJSONObject(metadata, filePath + "/canvasMetadata.json");
   }
   
-  public void exportCanvas(String fileName) {
+  public void exportCanvas(String filePath) {
+    graphics.save(filePath + ".png");
   }
 }

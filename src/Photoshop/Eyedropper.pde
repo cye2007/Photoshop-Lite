@@ -1,7 +1,7 @@
 public class Eyedropper implements Tool {  
   @Override
   public void mousePressed() {
-    foregroundColor = get(mouseX, mouseY);
+    currentColor = get(mouseX, mouseY);
   }
   
   @Override

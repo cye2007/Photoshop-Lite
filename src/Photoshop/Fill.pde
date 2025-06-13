@@ -10,7 +10,7 @@ public class Fill implements Tool {
   @Override
   public void mouseReleased() {
     currentLayer.graphics().beginDraw();
-    currentLayer.graphics().background(foregroundColor);
+    currentLayer.graphics().background(currentColor);
     currentLayer.graphics().endDraw();
   }
   

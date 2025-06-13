@@ -41,8 +41,11 @@ public class Layer extends Lockable {
     this.opacity = opacity;
   }
   
-  //public Layer duplicate() {
-  //  Layer duplicate = new Layer();
-  //  return duplicate;
-  //}
+  public Layer duplicate() {
+    Layer duplicate = new Layer("Copy of " + getName());
+    duplicate.graphics().beginDraw();
+    duplicate.graphics().image(graphics(), 0, 0);
+    duplicate.graphics().endDraw();
+    return duplicate;
+  }
 }
