@@ -1,8 +1,13 @@
+import java.util.LinkedList;
 import g4p_controls.*;
 
-int canvasWidth = 1080;
-int canvasHeight = 860;
-PVector centerOffset = new PVector(620, 490);
+//   G4P.selectColor();
+
+final int screenWidth = 1440;
+final int screenHeight = 760;
+int canvasWidth = 1040;
+int canvasHeight = 700;
+PVector centerOffset = new PVector(620, 410);
 PVector cornerOffset = new PVector(80, 60);
 
 Zoom zoom = new Zoom();
@@ -18,16 +23,17 @@ Layer currentLayer;
 Tool currentTool;
 color currentColor;
 
+PGraphics copy;
+
 void setup() {
   windowMove(0, 0);
-  surface.setSize(1440, 760);
+  surface.setSize(screenWidth, screenHeight);
   imageMode(CENTER);
   createGUI();
   filePath = null;
   canvas = new Canvas();
   layerIndex = 0;
   currentLayer = canvas.getLayer(layerIndex);
-  layerOpacity.setValue(canvas.getLayer(layerIndex).getOpacity());
   currentTool = null;
   currentColor = color(0);
   //displayColor = currentColor;
@@ -35,17 +41,13 @@ void setup() {
 }
 
 void draw() {
-  background(255);
-  //canvas.graphics().translate(-mouseX, -mouseY);
-  //canvas.graphics().scale(canvas.getZoom());
-  //canvas.graphics().translate(mouseX, mouseY);
   canvas.updateCanvas();
-  image(canvas.graphics(), centerOffset.x, centerOffset.y);
-  //for (Layer layer : canvas.layers) {
-  //  layer.graphics().scale(canvas.getZoom());
-  //  tint(255, layer.getOpacity() * 255);
-  //  image(layer.graphics(), offset.x, offset.y);
-  //}
+  image(canvas.graphics(), centerOffset.x, centerOffset.y, canvasWidth, canvasHeight);
+}
+
+void setLayerProperities() {
+  layerOpacity.setValue(currentLayer.getOpacity());
+  //layerWidth.setValue(canvas.getLayer(layerIndex).getWidth());
 }
 
 void mousePressed() {

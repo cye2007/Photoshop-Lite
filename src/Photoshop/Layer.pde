@@ -1,9 +1,12 @@
 public class Layer extends Lockable {
   private String name;
+  //private int layerWidth;
+  //private int layerHeight;
   private float opacity;
   private PGraphics graphics;
   
   public Layer(int num) {
+    super();
     name = "Layer " + num;
     graphics = createGraphics(canvasWidth, canvasHeight);
     graphics.beginDraw();
@@ -47,5 +50,12 @@ public class Layer extends Lockable {
     duplicate.graphics().image(graphics(), 0, 0);
     duplicate.graphics().endDraw();
     return duplicate;
+  }
+  
+  public void copy() {
+    copy = createGraphics(canvasWidth, canvasHeight);
+    copy.beginDraw();
+    copy.image(graphics, 0, 0);
+    copy.endDraw();
   }
 }

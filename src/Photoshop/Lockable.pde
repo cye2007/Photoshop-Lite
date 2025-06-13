@@ -1,28 +1,15 @@
 public abstract class Lockable {
-  String status;
+  boolean isLocked;
   
   public Lockable() {
-    status = "Unlocked";
+    isLocked = false;
   }
   
-  public Lockable(String status) {
-    this.status = status;
+  public boolean isLocked() {
+    return isLocked;
   }
   
-  public String getStatus() {
-    return status;
-  }
-  
-  public void toggleLockTransparent() {
-  }
-  
-  public void toggleLockImage() {
-  }
-  
-  public void toggleLockPosition() {
-  }
-  
-  public void toggleLockAll() {
-    
+  public void toggleLock() {
+    isLocked ^= true;
   }
 }

@@ -1,13 +1,18 @@
 public class Canvas extends Lockable {
+  private final int MAX_HISTORY_STATES = 20;
+  
   private String name;
   private int canvasWidth;
   private int canvasHeight;
   private int layerNumber = 1;
   private float zoom;
   private ArrayList<Layer> layers;
+  //private LinkedList<ArrayList<Layer>> history;
+  //private int currentState;
   private PGraphics graphics;
   
   public Canvas() {
+    super();
     name = "Untitled";
     canvasWidth = 1080;
     canvasHeight = 860;
@@ -15,6 +20,8 @@ public class Canvas extends Lockable {
     layers = new ArrayList<Layer>();
     layers.add(new Layer(layerNumber));
     layerNumber++;
+    //history = new LinkedList<ArrayList<Layer>>();
+    //history.add(layers);
     graphics = createGraphics(canvasWidth, canvasHeight);
     graphics.imageMode(CORNER);
   }
@@ -83,6 +90,15 @@ public class Canvas extends Lockable {
   
   public void changeZoom(float change) {
     zoom = Math.max(.1, zoom + change);
+    graphics.beginDraw();
+    graphics.translate(-mouseX, -mouseY);
+    graphics.scale(zoom);
+    graphics.translate(mouseX, mouseY);
+    for (Layer layer : layers) {
+      graphics.tint(255, layer.getOpacity() * 255);
+      graphics.image(layer.graphics(), 0, 0);
+    }
+    graphics.endDraw();
   }
   
   public int size() {
@@ -98,32 +114,43 @@ public class Canvas extends Lockable {
     layerNumber++;
   }
   
-  public Layer removeLayer(int index) {
+  public Layer deleteLayer(int index) {
     if (layers.size() <= 1) layers.add(new Layer(layerNumber));
     layerNumber++;
     return layers.remove(index);
   }
   
-  //public void duplicateLayer(int index) {
-  //  layers.add(layers.get(index).duplicate());
-  //}
+  public void duplicateLayer(int index) {
+    layers.add(layers.get(index).duplicate());
+  }
+  
+  public void sendLayerForward(int index) {
+    layers.add(Math.min(index + 1, layers.size()), layers.remove(index));
+  }
+  
+  public void sendLayerBackward(int index) {
+    layers.add(Math.max(index - 1, 0), layers.remove(index));
+  }
   
   public void reorderLayers(int index1, int index2) {
     layers.add(Math.max(index1, index2), layers.set(Math.min(index1, index2), layers.remove(Math.max(index1, index2))));
   }
   
   public void undo() {
+    
   }
   
   public void redo() {
   }
   
+  //public void updateHistory() {
+  //  if (history.size() >= MAX_HISTORY_STATES) history.removeFirst();
+  //  history.addLast(layers);
+  //}
+  
   public void updateCanvas() {
     graphics.beginDraw();
-    graphics.translate(-mouseX, -mouseY);
-    graphics.scale(zoom);
-    graphics.translate(mouseX, mouseY);
-    for (Layer layer : canvas.layers) {
+    for (Layer layer : layers) {
       graphics.tint(255, layer.getOpacity() * 255);
       graphics.image(layer.graphics(), 0, 0);
     }
