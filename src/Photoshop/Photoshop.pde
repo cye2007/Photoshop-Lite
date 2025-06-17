@@ -1,4 +1,3 @@
-import java.util.LinkedList;
 import g4p_controls.*;
 
 final int screenWidth = 1440;

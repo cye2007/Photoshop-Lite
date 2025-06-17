@@ -58,10 +58,6 @@ public void eyedropperButtonPressed(GButton source, GEvent event) { //_CODE_:eye
   currentTool = eyedropper;
 } //_CODE_:eyedropperButton:526776:
 
-public void typeButtonPressed(GButton source, GEvent event) { //_CODE_:typeButton:254522:
-  println("typeButton - GButton >> GEvent." + event + " @ " + millis());
-} //_CODE_:typeButton:254522:
-
 public void addImageButtonPressed(GButton source, GEvent event) { //_CODE_:addImageButton:495799:
   println("button1 - GButton >> GEvent." + event + " @ " + millis());
   selectInput("Select an image", "imageSelected");
@@ -179,15 +175,11 @@ public void createGUI(){
   fillButton.setText("Fill");
   fillButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   fillButton.addEventHandler(this, "fillButtonPressed");
-  eyedropperButton = new GButton(this, 0, 180, 80, 40);
+  eyedropperButton = new GButton(this, 0, 140, 80, 40);
   eyedropperButton.setText("Eyedropper");
   eyedropperButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   eyedropperButton.addEventHandler(this, "eyedropperButtonPressed");
-  typeButton = new GButton(this, 0, 140, 80, 40);
-  typeButton.setText("Type");
-  typeButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
-  typeButton.addEventHandler(this, "typeButtonPressed");
-  addImageButton = new GButton(this, 0, 220, 80, 40);
+  addImageButton = new GButton(this, 0, 180, 80, 40);
   addImageButton.setText("Add Image");
   addImageButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   addImageButton.addEventHandler(this, "addImageButtonPressed");
@@ -195,7 +187,6 @@ public void createGUI(){
   toolPanel.addControl(eraseButton);
   toolPanel.addControl(fillButton);
   toolPanel.addControl(eyedropperButton);
-  toolPanel.addControl(typeButton);
   toolPanel.addControl(addImageButton);
   LayerPanel = new GPanel(this, 1120, 60, 320, 700, "Layer");
   LayerPanel.setDraggable(false);
@@ -283,7 +274,6 @@ GButton brushButton;
 GButton eraseButton; 
 GButton fillButton; 
 GButton eyedropperButton; 
-GButton typeButton; 
 GButton addImageButton; 
 GPanel LayerPanel; 
 GButton addLayerButton; 

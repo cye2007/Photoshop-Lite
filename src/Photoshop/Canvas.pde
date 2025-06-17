@@ -1,6 +1,4 @@
 public class Canvas extends Lockable {
-  private final int MAX_HISTORY_STATES = 20;
-  
   private int canvasWidth;
   private int canvasHeight;
   private int layerNumber;
